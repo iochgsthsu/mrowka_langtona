@@ -5,9 +5,9 @@
 
 
 typedef struct siatka{
-	int ilosc_w;
-	int ilosc_k;
-	wchar_t*** komorki;
+	int ilosc_w; // ilosc wierszy
+	int ilosc_k; // ilosc kolumn
+	wchar_t*** komorki; 
 } siatka_t;
 
 siatka_t* utworz_siatke(int, int);

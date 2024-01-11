@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <time.h>
 #include <wchar.h>
-#include <locale.h>
 siatka_t* utworz_siatke(int m, int n)
 {
 	siatka_t* s = (siatka_t*) malloc(sizeof(siatka_t));
@@ -23,28 +22,29 @@ int wypelnij_siatke_z_pliku(siatka_t* s, FILE* plik)
 	{
 		return 1;
 	}
-	wchar_t c;
 	int x = 0;
 	int y = 0;
-	while((c = fgetc(plik)) != EOF)
+	wchar_t w;
+	while((w = fgetwc(plik)) != WEOF)
 	{
-		if(c == '\n')
+		if(w == '\n')
 		{
 			x = 0;
 			y++;
 			continue;
 		}
-		s->komorki[x][y] = c;
+		
+		s->komorki[x][y] = w;
 		x++;
 		
 	}
+	
 	return 0;
 
 }
 
 int wypelnij_siatke_losowo(siatka_t* s, double procent)
 {
-	setlocale(LC_ALL, "C.UTF-8");
 	wchar_t *square_white = L" ";
 	wchar_t *square_black = L"█";
 	if(s==NULL)
