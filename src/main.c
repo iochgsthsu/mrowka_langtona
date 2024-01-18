@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <wchar.h>
 #include <locale.h>
+
 #include "siatka.h"
 #include "mrowka.h"
 int main(int argc, char *argv[])
@@ -158,13 +159,13 @@ int main(int argc, char *argv[])
 	
 	siatka_t* plansza = utworz_siatke(m,n);
 	obramowanie(plansza);
-	if(o_px == 0)
+	if(o_px == 0 && o_wcz == 0 )
 	{
 		px = (int)(m/2);
 
 	}	
 
-	if(o_py == 0)
+	if(o_py == 0 && o_wcz == 0)
 	{
 		py = (int)(n/2);
 	}
@@ -174,7 +175,7 @@ int main(int argc, char *argv[])
 	if(o_wcz == 1)
 	{
 		FILE* plik = fopen(nazwapliku_wczytanie, "r");
-		wypelnij_siatke_z_pliku(plansza, plik);
+		wypelnij_siatke_z_pliku(plansza, mr, plik);
 		fclose(plik);
 	}
 	else if(o_pr == 1 )

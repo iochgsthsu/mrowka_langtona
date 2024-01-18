@@ -1,4 +1,5 @@
 #include "siatka.h"
+#include "mrowka.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
@@ -47,76 +48,6 @@ int obramowanie(siatka_t* s)
 
 }
 
-int wypelnij_siatke_z_pliku(siatka_t* s, FILE* plik)
-{
-	if(s == NULL || plik == NULL)
-	{
-		return 1;
-	}
-	wchar_t tmp1[s->ilosc_w][s->ilosc_k];
-	wchar_t tmp[s->ilosc_k+1];
-	for(int i = 0; i<2*s->ilosc_w; i++)
-	{
-		fgetws(tmp, s->ilosc_k+1, plik);
-		if(i%2==0)
-		{
-			for(int j = 0; j<s->ilosc_k; j++)
-			{
-				tmp1[i/2][j] = tmp[j];
-				
-			}
-			
-		
-		}
-	
-	}
-	/* test
-	for(int i = 0; i<s->ilosc_w; i++)
-	{
-		for(int j =0; j<s->ilosc_k; j++)
-		{
-			printf("%lc", tmp1[i][j]);
-			
-		
-		}
-			printf("\n");
-		
-	
-	}
-	*/
-	
-	for(int i = 1; i<s->ilosc_w-1; i++)
-	{
-		for(int j =1; j<s->ilosc_k-1; j++)
-		{
-			if(tmp1[i][j] == ' ')
-			{
-				s->komorki[i][j] = L" ";
-			}
-			else
-			{
-				s->komorki[i][j] = L"█";
-			}
-			
-		
-		}
-	}
-
-	
-	
-	
-
-	
-	
-	
-	
-	
-
-	
-	
-	return 0;
-
-}
 
 int wypelnij_siatke_losowo(siatka_t* s, double procent)
 {
