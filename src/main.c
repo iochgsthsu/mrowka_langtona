@@ -45,8 +45,8 @@ int main(int argc, char *argv[])
 	 w - wczytanie mapy (nazwa pliku)
 	 z - zapis rezultatu (nazwa pliku)
 	 k - poczatkowy kierunek mrowki (0,1,2,3)
-       	 x - poczatkowa wspolrzedna x mrowki (domyslnie m/2)
-	 y - poczatkowa wspolrzedna y mrowki (domyslnie n/2)	 
+       	 x - poczatkowy wiersz mrowki (domyslnie m/2)
+	 y - poczatkowa kolumna mrowki (domyslnie n/2)	 
 	 */
 	int opcja;
 	while((opcja = getopt(argc, argv, "m:n:i:p:w:z:k:x:y:")) != -1)
@@ -122,7 +122,7 @@ int main(int argc, char *argv[])
 	int ob_i = 0; // obecna ilosc iteracji;
 	
 	// bledy
-	if(o_i == 0 || il_i<0)
+	if((o_i == 0 || il_i<0) && o_wcz == 0)
 	{
 		fprintf(stderr, "Nie podano ilosci iteracji lub jest nieprawidlowa\n");
 		return 1;
@@ -138,14 +138,14 @@ int main(int argc, char *argv[])
 		fprintf(stderr, "Nie podano ilosci kolumn lub jest nieprawidlowa\n");
 		return 1;
 	}
-	if(o_pk == 0 || (pk>3 || pk<0))
+	if((o_pk == 0 || pk>3 || pk<0) && o_wcz == 0)
 	{
 		fprintf(stderr, "Nie podano poczatkowego kierunku lub jest nieprawidlowy\n");
 		return 1;
 	}
-	if((o_wcz == 1 && o_pr == 1) || (o_wcz == 0 && o_pr == 0))
+	if((o_wcz == 1 && o_pr == 1))
 	{
-		fprintf(stderr, "Podany tryb wczytanie planszy nie zostal podany lub jest nieprawidlowy\n");
+		fprintf(stderr, "Podany tryb wczytania planszy nie zostal podany lub jest nieprawidlowy\n");
 		return 1;
 	}
 	
@@ -153,6 +153,17 @@ int main(int argc, char *argv[])
 	{
 		fprintf(stderr, "Nieprawidlowa ilosc procent zapelnienia planszy czarnymi polami\n");
 		return 1;
+	}
+	
+	if(o_wcz == 1 && (o_px == 1 || o_py == 1))
+	{
+		fprintf(stderr, "Podano tryb wczytania planszy, wiec ignoruje podane wspolrzedne");
+	
+	}
+	
+	if(o_pr == 0 && o_wcz == 0)
+	{
+		procent_w =0;	
 	}
 	
 	// koniec bledow
@@ -178,7 +189,7 @@ int main(int argc, char *argv[])
 		wypelnij_siatke_z_pliku(plansza, mr, plik);
 		fclose(plik);
 	}
-	else if(o_pr == 1 )
+	else
 	{
 		wypelnij_siatke_losowo(plansza, procent_w);
 	}
