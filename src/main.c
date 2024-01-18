@@ -121,25 +121,25 @@ int main(int argc, char *argv[])
 	int ob_i = 0; // obecna ilosc iteracji;
 	
 	// bledy
-	if(o_i == 0)
+	if(o_i == 0 || il_i<0)
 	{
-		fprintf(stderr, "Nie podano ilosci iteracji\n");
+		fprintf(stderr, "Nie podano ilosci iteracji lub jest nieprawidlowa\n");
 		return 1;
 	}
 	
-	if(o_m == 0)
+	if(o_m == 0 || m<0)
 	{
-		fprintf(stderr, "Nie podano ilosci wierszy\n");
+		fprintf(stderr, "Nie podano ilosci wierszy lub jest nieprawidlowa\n");
 		return 1;
 	}
-	if(o_n == 0)
+	if(o_n == 0 || n<0)
 	{
-		fprintf(stderr, "Nie podano ilosci kolumn\n");
+		fprintf(stderr, "Nie podano ilosci kolumn lub jest nieprawidlowa\n");
 		return 1;
 	}
-	if(o_pk == 0)
+	if(o_pk == 0 || (pk>3 || pk<0))
 	{
-		fprintf(stderr, "Nie podano poczatkowego kierunku\n");
+		fprintf(stderr, "Nie podano poczatkowego kierunku lub jest nieprawidlowy\n");
 		return 1;
 	}
 	if((o_wcz == 1 && o_pr == 1) || (o_wcz == 0 && o_pr == 0))
@@ -147,6 +147,13 @@ int main(int argc, char *argv[])
 		fprintf(stderr, "Podany tryb wczytanie planszy nie zostal podany lub jest nieprawidlowy\n");
 		return 1;
 	}
+	
+	if(o_pr == 1 && (procent_w>100 || procent_w<0))
+	{
+		fprintf(stderr, "Nieprawidlowa ilosc procent zapelnienia planszy czarnymi polami\n");
+		return 1;
+	}
+	
 	// koniec bledow
 	
 	siatka_t* plansza = utworz_siatke(m,n);
@@ -179,7 +186,6 @@ int main(int argc, char *argv[])
 	
 	while(ob_i!=il_i+1)
 	{
-		printf("aha,i:%d",ob_i);
 		
 		strzalka(plansza, mr);
 		if(o_z == 1)
