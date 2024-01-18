@@ -49,9 +49,12 @@ int wypelnij_siatke_z_pliku(siatka_t* s, FILE* plik)
 	}
 	int x = 0;
 	int y = 0;
-	wchar_t w;
+	wchar_t w,r;
 	while((w = fgetwc(plik)) != WEOF)
 	{
+		while((r = fgetwc(w)) != WEOF)
+		{
+		
 		if(w == '\n')
 		{
 			x = 0;
@@ -61,6 +64,10 @@ int wypelnij_siatke_z_pliku(siatka_t* s, FILE* plik)
 		
 		s->komorki[x][y] = w;
 		x++;
+		
+		
+		
+		}
 		
 	}
 	
@@ -85,22 +92,22 @@ int wypelnij_siatke_losowo(siatka_t* s, double procent)
 			s->komorki[i][j] = square_white;
 		}
 	}
-	int ilosc_czarnych = (int)((s->ilosc_k*s->ilosc_w)*(procent/100));
+	int ilosc_czarnych = (int)(((s->ilosc_k-2)*(s->ilosc_w-2))*(procent/100));
 	int aktualna_ilosc = 0;
 	srand(time(0));
 	int tmp_x, tmp_y;
 	while(ilosc_czarnych != aktualna_ilosc)
 	{
-		tmp_x = rand()%(s->ilosc_w);
-		tmp_y = rand()%(s->ilosc_k);
+		tmp_x = (rand()%(s->ilosc_w-2)) +1;
+		tmp_y = (rand()%(s->ilosc_k-2)) +1;
 		if(s->komorki[tmp_x][tmp_y] != square_black)
 		{
 			s->komorki[tmp_x][tmp_y] = square_black;
 			aktualna_ilosc++;
 		}
 	
-	}
-	
+	}	
+		
 	
 	return 0;
 }
@@ -113,5 +120,18 @@ void wypisz_siatke(siatka_t* s)
 		}
 		printf("\n");
 	}
+}
+
+void zapisz_siatke(FILE *plik, siatka_t* s)
+{
+
+	for (int i = 0; i<s->ilosc_w; i++) {
+		for (int j = 0; j <s->ilosc_k; j++) {
+			fprintf(plik, "%ls", s->komorki[i][j]);
+		}
+		fprintf(plik, "\n");
+	}
+
+
 }
 

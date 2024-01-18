@@ -26,9 +26,10 @@ int main(int argc, char *argv[])
 	double procent_w;
 	int o_pr = 0;
 	// nazwa pliku do zapisu
-	char* nazwapliku_zapis;	
+	char* nazwapliku_zapis;
+	int o_z = 0;
 	// nazwa pliku do wczytania
-	char* nazwapliku_wczytanie;
+	char* nazwapliku_wczytanie;	
 	// poczatkowe wspolrzedne mrowki
 	int px,py;
 	int o_px = 0;
@@ -43,8 +44,8 @@ int main(int argc, char *argv[])
 	 w - wczytanie mapy (nazwa pliku)
 	 z - zapis rezultatu (nazwa pliku)
 	 k - poczatkowy kierunek mrowki (0,1,2,3)
-       	 x - poczatkowa wspolrzedna x mrowki (domyslnie n/2)
-	 y - poczatkowa wspolrzedna y mrowki (domyslnie m/2)	 
+       	 x - poczatkowa wspolrzedna x mrowki (domyslnie m/2)
+	 y - poczatkowa wspolrzedna y mrowki (domyslnie n/2)	 
 	 */
 	int opcja;
 	while((opcja = getopt(argc, argv, "m:n:i:p:w:z:k:x:y:")) != -1)
@@ -85,6 +86,7 @@ int main(int argc, char *argv[])
 			}
 			case 'z':
 			{
+				o_z = 1;
 				nazwapliku_zapis = optarg;
 				break;
 
@@ -175,14 +177,29 @@ int main(int argc, char *argv[])
 
 	
 	
-	while(ob_i!=il_i)
+	while(ob_i!=il_i+1)
 	{
 		
+		
 		strzalka(plansza, mr);
-		printf("%d:\n",ob_i);
-		wypisz_siatke(plansza);
+		if(o_z == 1)
+		{
+	
+			char tmp[128];
+			sprintf(tmp, "%s_%d", nazwapliku_zapis, ob_i);
+			FILE *zapis = fopen(tmp, "w");
+			zapisz_siatke(zapis, plansza);
+		
+		}
+		else
+		{
+			printf("%d:\n",ob_i);
+			wypisz_siatke(plansza);
+		}
+		
 		ruch(plansza, mr);
 		ob_i++;
+		
 		if(mr->x == 0 || mr->x == plansza->ilosc_w-1 || mr->y == 0 || mr->y == plansza->ilosc_k-1) // czy mrowka nie wyszla za plansze
 		{
 			printf("Mrowka wyszla za plansze\n");
@@ -190,13 +207,13 @@ int main(int argc, char *argv[])
 			break;
 		}
 		
+		
 	
 	}
-	printf("Koncowa ilosc iteracji: %d", ob_i);
-	//char tmp[100];
-	//sprintf(tmp, "%s_%d", nazwapliku_zapis, ob_i);
-	//FILE *zapis = fopen(tmp, "w");
-	//fprintf(zapis, "%", wypisz_siatke(plansza));
+	ob_i--;
+	printf("Koncowa ilosc iteracji: %d\n", ob_i);
+	
+	
 	
 	
 	
