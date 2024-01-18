@@ -203,7 +203,6 @@ int main(int argc, char *argv[])
 		if(mr->x == 0 || mr->x == plansza->ilosc_w-1 || mr->y == 0 || mr->y == plansza->ilosc_k-1) // czy mrowka nie wyszla za plansze
 		{
 			printf("Mrowka wyszla za plansze\n");
-			ob_i--;
 			break;
 		}
 		
