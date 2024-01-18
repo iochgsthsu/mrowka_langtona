@@ -131,6 +131,7 @@ void zapisz_siatke(FILE *plik, siatka_t* s)
 		}
 		fprintf(plik, "\n");
 	}
+	fclose(plik);
 
 
 }

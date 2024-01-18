@@ -179,16 +179,17 @@ int main(int argc, char *argv[])
 	
 	while(ob_i!=il_i+1)
 	{
-		
+		printf("aha,i:%d",ob_i);
 		
 		strzalka(plansza, mr);
 		if(o_z == 1)
 		{
 	
-			char tmp[128];
+			char *tmp = malloc(128*sizeof(char));
 			sprintf(tmp, "%s_%d", nazwapliku_zapis, ob_i);
 			FILE *zapis = fopen(tmp, "w");
 			zapisz_siatke(zapis, plansza);
+			free(tmp);
 		
 		}
 		else
