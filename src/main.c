@@ -175,6 +175,7 @@ int main(int argc, char *argv[])
 	{
 		FILE* plik = fopen(nazwapliku_wczytanie, "r");
 		wypelnij_siatke_z_pliku(plansza, plik);
+		fclose(plik);
 	}
 	else if(o_pr == 1 )
 	{
@@ -196,6 +197,7 @@ int main(int argc, char *argv[])
 			FILE *zapis = fopen(tmp, "w");
 			zapisz_siatke(zapis, plansza);
 			free(tmp);
+			
 		
 		}
 		else

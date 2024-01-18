@@ -8,6 +8,7 @@ siatka_t* utworz_siatke(int m, int n)
 	siatka_t* s = (siatka_t*) malloc(sizeof(siatka_t));
 	s->ilosc_w = m+2;
 	s->ilosc_k = n+2;
+	//odpowiednia ilosc +=2 na obramowanie
 	s->komorki = (wchar_t***)malloc(s->ilosc_w * sizeof(wchar_t**));
 	for(int i = 0; i < s->ilosc_w; i++)
 	{
@@ -18,18 +19,23 @@ siatka_t* utworz_siatke(int m, int n)
 
 int obramowanie(siatka_t* s)
 {
+	if(s == NULL)
+	{
+		return 1;
+	}
+	//rogi
 	s->komorki[0][0] = L"┌";
 	s->komorki[0][s->ilosc_k-1] = L"┐";
 	s->komorki[s->ilosc_w-1][s->ilosc_k-1] = L"┘";
 	s->komorki[s->ilosc_w-1][0] = L"└";
 	
-	for(int i = 1; i<s->ilosc_k-1; i++)
+	for(int i = 1; i<s->ilosc_k-1; i++) //gorna i dolna krawedz
 	{
 		s->komorki[0][i] = L"─";
 		s->komorki[s->ilosc_w-1][i] = L"─";
 	}
 	
-	for(int i = 1; i<s->ilosc_w-1; i++)
+	for(int i = 1; i<s->ilosc_w-1; i++) // lewa i prawa krawedz
 	{
 		s->komorki[i][0] = L"│";
 		s->komorki[i][s->ilosc_k-1] = L"│";
@@ -47,29 +53,66 @@ int wypelnij_siatke_z_pliku(siatka_t* s, FILE* plik)
 	{
 		return 1;
 	}
-	int x = 0;
-	int y = 0;
-	wchar_t w,r;
-	while((w = fgetwc(plik)) != WEOF)
+	wchar_t tmp1[s->ilosc_w][s->ilosc_k];
+	wchar_t tmp[s->ilosc_k+1];
+	for(int i = 0; i<2*s->ilosc_w; i++)
 	{
-		while((r = fgetwc(w)) != WEOF)
+		fgetws(tmp, s->ilosc_k+1, plik);
+		if(i%2==0)
 		{
-		
-		if(w == '\n')
-		{
-			x = 0;
-			y++;
-			continue;
-		}
-		
-		s->komorki[x][y] = w;
-		x++;
-		
-		
+			for(int j = 0; j<s->ilosc_k; j++)
+			{
+				tmp1[i/2][j] = tmp[j];
+				
+			}
+			
 		
 		}
-		
+	
 	}
+	/* test
+	for(int i = 0; i<s->ilosc_w; i++)
+	{
+		for(int j =0; j<s->ilosc_k; j++)
+		{
+			printf("%lc", tmp1[i][j]);
+			
+		
+		}
+			printf("\n");
+		
+	
+	}
+	*/
+	
+	for(int i = 1; i<s->ilosc_w-1; i++)
+	{
+		for(int j =1; j<s->ilosc_k-1; j++)
+		{
+			if(tmp1[i][j] == ' ')
+			{
+				s->komorki[i][j] = L" ";
+			}
+			else
+			{
+				s->komorki[i][j] = L"█";
+			}
+			
+		
+		}
+	}
+
+	
+	
+	
+
+	
+	
+	
+	
+	
+
+	
 	
 	return 0;
 
