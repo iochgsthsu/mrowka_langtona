@@ -6,14 +6,39 @@
 siatka_t* utworz_siatke(int m, int n)
 {
 	siatka_t* s = (siatka_t*) malloc(sizeof(siatka_t));
-	s->ilosc_w = m;
-	s->ilosc_k = n;
+	s->ilosc_w = m+2;
+	s->ilosc_k = n+2;
 	s->komorki = (wchar_t***)malloc(s->ilosc_w * sizeof(wchar_t**));
 	for(int i = 0; i < s->ilosc_w; i++)
 	{
 		s->komorki[i] = (wchar_t**)malloc(s->ilosc_k * sizeof(wchar_t*));
 	}
 	return s;
+}
+
+int obramowanie(siatka_t* s)
+{
+	s->komorki[0][0] = L"┌";
+	s->komorki[0][s->ilosc_k-1] = L"┐";
+	s->komorki[s->ilosc_w-1][s->ilosc_k-1] = L"┘";
+	s->komorki[s->ilosc_w-1][0] = L"└";
+	
+	for(int i = 1; i<s->ilosc_k-1; i++)
+	{
+		s->komorki[0][i] = L"─";
+		s->komorki[s->ilosc_w-1][i] = L"─";
+	}
+	
+	for(int i = 1; i<s->ilosc_w-1; i++)
+	{
+		s->komorki[i][0] = L"│";
+		s->komorki[i][s->ilosc_k-1] = L"│";
+	}
+	
+	return 1;
+	
+	
+
 }
 
 int wypelnij_siatke_z_pliku(siatka_t* s, FILE* plik)
@@ -52,10 +77,11 @@ int wypelnij_siatke_losowo(siatka_t* s, double procent)
 		return 1;
 	}
 	
-	for(int i = 0; i<s->ilosc_w; i++)
+	for(int i = 1; i<s->ilosc_w-1; i++)
 	{
-		for(int j = 0; j<s->ilosc_k; j++)
+		for(int j = 1; j<s->ilosc_k-1; j++)
 		{
+			
 			s->komorki[i][j] = square_white;
 		}
 	}

@@ -8,12 +8,31 @@
 int main(int argc, char *argv[])
 {
 	setlocale(LC_ALL, "C.UTF-8");
-	int m,n,il_i,pk;
-	int p_tryb;
-	int opcja;
+	//ilosc wierszy planszy
+	int o_m = 0;
+	int m;
+	//ilosc kolumn planszy
+	int o_n = 0;
+	int n;
+	//ilosc iteracji
+	int o_i = 0;
+	int il_i;
+	// poczatkowy kierunek
+	int o_pk = 0;
+	int pk;
+	// wybor trybu wczytania planszy
+	int o_wcz = 0;
+	// procent wypelnienia planszy
 	double procent_w;
+	int o_pr = 0;
+	// nazwa pliku do zapisu
 	char* nazwapliku_zapis;	
+	// nazwa pliku do wczytania
 	char* nazwapliku_wczytanie;
+	// poczatkowe wspolrzedne mrowki
+	int px,py;
+	int o_px = 0;
+	int o_py = 0;
 	
 
 	/*
@@ -23,39 +42,45 @@ int main(int argc, char *argv[])
 	 p - wygenerowanie mapy (procent)
 	 w - wczytanie mapy (nazwa pliku)
 	 z - zapis rezultatu (nazwa pliku)
-	 k - poczatkowy kierunek (0,1,2,3)  
+	 k - poczatkowy kierunek mrowki (0,1,2,3)
+       	 x - poczatkowa wspolrzedna x mrowki (domyslnie n/2)
+	 y - poczatkowa wspolrzedna y mrowki (domyslnie m/2)	 
 	 */
-	while((opcja = getopt(argc, argv, "m:n:i:p:w:z:k:")) != -1)
+	int opcja;
+	while((opcja = getopt(argc, argv, "m:n:i:p:w:z:k:x:y:")) != -1)
 	{
 		switch(opcja)
 		{
 			case 'm':
 			{
+				o_m = 1;
 				m = atoi(optarg);
 				break;
 			}
 			case 'n':
 			{
+				o_n = 1;
 				n = atoi(optarg);
 				break;
 			}
 			case 'i':
 			{
+				o_i = 1;
 				il_i = atoi(optarg);
 				break;
 			}
 			case 'p':
 			{
 				//wygenerowanie
-				p_tryb = 1;
+				o_pr = 1;
 				procent_w = atof(optarg);
 				break;
 			}	
 			case 'w':
 			{
 				//wczytanie
+				o_wcz = 1;
 				nazwapliku_wczytanie = optarg;
-				p_tryb = 0;
 				break;
 			}
 			case 'z':
@@ -66,11 +91,24 @@ int main(int argc, char *argv[])
 			}
 			case 'k':
 			{
+				o_pk = 1;
 				pk = atoi(optarg);
 
 				break;
 
 			}
+			case 'x':
+			{
+				o_px = 1;
+				px = atoi(optarg);
+				break;
+			}
+			case 'y':
+			{
+				o_py = 1;
+				py = atoi(optarg);
+			}
+
 			default:
 			{
 				break;
@@ -79,38 +117,94 @@ int main(int argc, char *argv[])
 
 	}
 	int ob_i = 0; // obecna ilosc iteracji;
-	siatka_t* plansza = utworz_siatke(m,n);
 	
-	//int px_m = rand()%(plansza->ilosc_w); // poczatkowe wspolrzedne x i y
-	//int py_m = rand()%(plansza->ilosc_k);
-	int px_m = 50;
-	int py_m = 50;
-	mrowka_t* mr = utworz_mrowke(px_m, py_m, pk);
-	if(p_tryb == 0)
+	// bledy
+	if(o_i == 0)
+	{
+		fprintf(stderr, "Nie podano ilosci iteracji\n");
+		return 1;
+	}
+	
+	if(o_m == 0)
+	{
+		fprintf(stderr, "Nie podano ilosci wierszy\n");
+		return 1;
+	}
+	if(o_n == 0)
+	{
+		fprintf(stderr, "Nie podano ilosci kolumn\n");
+		return 1;
+	}
+	if(o_pk == 0)
+	{
+		fprintf(stderr, "Nie podano poczatkowego kierunku\n");
+		return 1;
+	}
+	if((o_wcz == 1 && o_pr == 1) || (o_wcz == 0 && o_pr == 0))
+	{
+		fprintf(stderr, "Podany tryb wczytanie planszy nie zostal podany lub jest nieprawidlowy\n");
+		return 1;
+	}
+	// koniec bledow
+	
+	siatka_t* plansza = utworz_siatke(m,n);
+	obramowanie(plansza);
+	if(o_px == 0)
+	{
+		px = (int)(m/2);
+
+	}	
+
+	if(o_py == 0)
+	{
+		py = (int)(n/2);
+	}
+	
+	mrowka_t* mr = utworz_mrowke(px, py, pk);
+
+	if(o_wcz == 1)
 	{
 		FILE* plik = fopen(nazwapliku_wczytanie, "r");
 		wypelnij_siatke_z_pliku(plansza, plik);
 	}
-	else if(p_tryb == 1 )
+	else if(o_pr == 1 )
 	{
 		wypelnij_siatke_losowo(plansza, procent_w);
 	}
+
+
+	
 	
 	while(ob_i!=il_i)
 	{
+		
+		strzalka(plansza, mr);
+		printf("%d:\n",ob_i);
+		wypisz_siatke(plansza);
 		ruch(plansza, mr);
-		if((plansza->ilosc_w < mr->y) || (mr->y<0) || (mr->x<0) || (plansza->ilosc_k < mr->x)) // czy mrowka nie wyszla za plansze
+		ob_i++;
+		if(mr->x == 0 || mr->x == plansza->ilosc_w-1 || mr->y == 0 || mr->y == plansza->ilosc_k-1) // czy mrowka nie wyszla za plansze
 		{
+			printf("Mrowka wyszla za plansze\n");
+			ob_i--;
 			break;
 		}
-		wypisz_siatke(plansza);
-		ob_i++;
-		printf("mx:%d, my:%d, k:%d, i:%d\n", mr->x, mr->y, mr->k, ob_i);
-		usleep(10000);
-		system("clear");
 		
 	
 	}
+	printf("Koncowa ilosc iteracji: %d", ob_i);
+	//char tmp[100];
+	//sprintf(tmp, "%s_%d", nazwapliku_zapis, ob_i);
+	//FILE *zapis = fopen(tmp, "w");
+	//fprintf(zapis, "%", wypisz_siatke(plansza));
+	
+	
+	
+	
+	
+	
+	
+	
 	return 0;
 	
 	

@@ -10,6 +10,7 @@ typedef struct mrowka{
 } mrowka_t;
 
 mrowka_t* utworz_mrowke(int, int, int);
+int strzalka(siatka_t*, mrowka_t*);
 int ruch(siatka_t*, mrowka_t*);
 
 #endif
