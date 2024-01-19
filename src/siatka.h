@@ -13,7 +13,5 @@ typedef struct siatka{
 siatka_t* utworz_siatke(int, int);
 int obramowanie (siatka_t*);
 int wypelnij_siatke_losowo(siatka_t*, double);
-void wypisz_siatke(siatka_t*);
-void zapisz_siatke(FILE*, siatka_t*);
 
 #endif

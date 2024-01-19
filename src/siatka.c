@@ -86,27 +86,5 @@ int wypelnij_siatke_losowo(siatka_t* s, double procent)
 	return 0;
 }
 
-void wypisz_siatke(siatka_t* s) 
-{	
-	for (int i = 0; i<s->ilosc_w; i++) {
-		for (int j = 0; j <s->ilosc_k; j++) {
-			printf("%ls", s->komorki[i][j]);
-		}
-		printf("\n");
-	}
-}
 
-void zapisz_siatke(FILE *plik, siatka_t* s)
-{
-
-	for (int i = 0; i<s->ilosc_w; i++) {
-		for (int j = 0; j <s->ilosc_k; j++) {
-			fprintf(plik, "%ls", s->komorki[i][j]);
-		}
-		fprintf(plik, "\n");
-	}
-	fclose(plik);
-
-
-}
 

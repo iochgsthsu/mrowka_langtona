@@ -6,6 +6,7 @@
 
 #include "siatka.h"
 #include "mrowka.h"
+#include "wczytzap.h"
 int main(int argc, char *argv[])
 {
 	setlocale(LC_ALL, "C.UTF-8");
@@ -122,7 +123,7 @@ int main(int argc, char *argv[])
 	int ob_i = 0; // obecna ilosc iteracji;
 	
 	// bledy
-	if((o_i == 0 || il_i<0) && o_wcz == 0)
+	if((o_i == 0 || il_i<0) && o_i == 0)
 	{
 		fprintf(stderr, "Nie podano ilosci iteracji lub jest nieprawidlowa\n");
 		return 1;

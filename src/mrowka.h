@@ -12,7 +12,6 @@ typedef struct mrowka{
 mrowka_t* utworz_mrowke(int, int, int);
 int strzalka(siatka_t*, mrowka_t*);
 int ruch(siatka_t*, mrowka_t*);
-int wypelnij_siatke_z_pliku(siatka_t*, mrowka_t*, FILE*);
 
 #endif
 
