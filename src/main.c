@@ -187,6 +187,11 @@ int main(int argc, char *argv[])
 	if(o_wcz == 1)
 	{
 		FILE* plik = fopen(nazwapliku_wczytanie, "r");
+		if(plik == NULL)
+		{
+			fprintf(stderr, "%s: Nie mozna otworzyc pliku\n", argv[0]);
+			return 1;
+		}
 		wypelnij_siatke_z_pliku(plansza, mr, plik);
 		fclose(plik);
 	}
